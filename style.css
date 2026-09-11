@@ -51,3 +51,8 @@ pre {
 	padding: 10px;
 	background-color: #f4f4f4;
 }
+
+#loadmore a {
+	display: inline-block;
+	margin: 5px 0 20px;
+}
