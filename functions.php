@@ -39,26 +39,3 @@ function dd( $arr ) {
 	print_r( $arr );
 	echo '</pre>';
 }
-
-/**
- * Load more AJAX handler
- */
-function kamuz_loadmore_pagination() {
-	$paged = ! empty( $_POST['paged'] ) ? $_POST['paged'] : 1;
-
-	query_posts(
-		array(
-			'paged' => $paged,
-		)
-	);
-
-	if ( have_posts() ) {
-		while ( have_posts() ) {
-			the_post();
-			echo '<li><a href="' . esc_attr( get_the_permalink() ) . '">' . esc_html( get_the_title() ) . '</a></li>' . "\r\n";
-		}
-	}
-	wp_die();
-}
-add_action( 'wp_ajax_loadmore', 'kamuz_loadmore_pagination' );
-add_action( 'wp_ajax_nopriv_loadmore', 'kamuz_loadmore_pagination' );
