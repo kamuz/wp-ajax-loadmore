@@ -4,6 +4,7 @@ jQuery(function($) {
 	const maxPages = button.data('maxpages');
 	const taxonomy = button.data('taxonomy');
 	const termID = button.data('term-id');
+	const paginationLink = button.data('pagenumlink')
 	let paged = button.data('paged');
 	console.log('Hey');
 	button.click(function(e) {
@@ -16,6 +17,7 @@ jQuery(function($) {
 				paged: ++paged, // next page number
 				taxonomy: taxonomy,
 				termID: termID,
+				pagenumlink: paginationLink,
 				action: 'loadmore' // AJAX action hook on the server
 			},
 			dataType: 'json',
@@ -23,8 +25,9 @@ jQuery(function($) {
 				button.addClass('is-loading').text('Loading...'); // show loading state
 			},
 			success: function(data){
-				console.log(data);
-				$('#posts-list').append(data); // insert new posts before the button
+				console.log(data.pagination);
+				$('#posts-list').append(data.posts); // insert new posts before the button
+				$('.pagination').html(data.pagination);
 				button.removeClass('is-loading').text('Load more'); // restore button label
 				if(paged == maxPages) {
 					button.parent().remove();

@@ -44,6 +44,20 @@ function dd( $arr ) {
 }
 
 /**
+ * Numeric pagination
+ */
+function simple_pagination() {
+	global $wp_query;
+	echo paginate_links(
+		array(
+			'total'   => $wp_query->max_num_pages,
+			'current' => max( 1, get_query_var( 'paged' ) ),
+			'type'    => 'list',
+		)
+	);
+}
+
+/**
  * Load more AJAX handler
  */
 function kamuz_loadmore_pagination() {
@@ -58,30 +72,39 @@ function kamuz_loadmore_pagination() {
 	$term_id = ! empty( $_POST['termID'] ) ? $_POST['termID'] : '';
 
 	if ( $taxonomy && $term_id ) {
-		$args = array(
-			'taxonomy' => $taxonomy,
-			'terms'    => $term_id,
+		$args['tax_query'] = array(
+			array(
+				'taxonomy' => $taxonomy,
+				'field'    => 'term_id',
+				'terms'    => $term_id,
+			),
 		);
 	}
 
 	query_posts( $args );
 
+	// Bufer posts.
 	ob_start();
-
 	if ( have_posts() ) {
 		while ( have_posts() ) {
 			the_post();
 			echo '<li><a href="' . esc_attr( get_the_permalink() ) . '">' . esc_html( get_the_title() ) . '</a></li>' . "\r\n";
 		}
 	}
-
 	$posts = ob_get_contents();
 	ob_get_clean();
 
+	// Bufer pagination.
+	ob_start();
+	simple_pagination();
+	$pagination = ob_get_contents();
+	ob_get_clean();
+
+	// Send back to frontend.
 	echo wp_json_encode(
 		array(
-			'posts'     => $posts,
-			// 'paginaion' => $pagination,
+			'posts'      => $posts,
+			'pagination' => str_replace( admin_url( 'admin-ajax.php'), $_POST['pagenumlink'], $pagination ),
 		)
 	);
 	wp_die();

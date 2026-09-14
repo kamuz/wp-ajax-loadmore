@@ -17,16 +17,7 @@ get_header(); ?>
 			</ul>
 			<?php get_template_part( 'partials/loadmore' ); ?>
 			<div class="pagination">
-				<?php
-				global $wp_query;
-				echo paginate_links(
-					array(
-						'total'   => $wp_query->max_num_pages,
-						'current' => max( 1, get_query_var( 'paged' ) ),
-						'type'    => 'list',
-					)
-				);
-				?>
+				<?php simple_pagination(); ?>
 			</div>
 		<?php endif; ?>
 	</div>
