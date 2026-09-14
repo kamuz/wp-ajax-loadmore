@@ -18,12 +18,12 @@ jQuery(function($) {
 				termID: termID,
 				action: 'loadmore' // AJAX action hook on the server
 			},
+			dataType: 'json',
 			beforeSend: function(){
 				button.addClass('is-loading').text('Loading...'); // show loading state
 			},
 			success: function(data){
 				console.log(data);
-				console.log(paged);
 				$('#posts-list').append(data); // insert new posts before the button
 				button.removeClass('is-loading').text('Load more'); // restore button label
 				if(paged == maxPages) {

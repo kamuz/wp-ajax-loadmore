@@ -66,12 +66,24 @@ function kamuz_loadmore_pagination() {
 
 	query_posts( $args );
 
+	ob_start();
+
 	if ( have_posts() ) {
 		while ( have_posts() ) {
 			the_post();
 			echo '<li><a href="' . esc_attr( get_the_permalink() ) . '">' . esc_html( get_the_title() ) . '</a></li>' . "\r\n";
 		}
 	}
+
+	$posts = ob_get_contents();
+	ob_get_clean();
+
+	echo wp_json_encode(
+		array(
+			'posts'     => $posts,
+			// 'paginaion' => $pagination,
+		)
+	);
 	wp_die();
 }
 add_action( 'wp_ajax_loadmore', 'kamuz_loadmore_pagination' );
