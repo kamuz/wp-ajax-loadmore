@@ -61,8 +61,7 @@ function simple_pagination() {
  * Load more AJAX handler
  */
 function kamuz_loadmore_pagination() {
-	$paged = ! empty( $_POST['paged'] ) ? $_POST['paged'] : 1;
-
+	$paged       = ! empty( $_POST['paged'] ) ? $_POST['paged'] : 1;
 	$current_url = $_POST['pagenumlink'];
 
 	// Remove existing pagination from URL.
@@ -77,7 +76,7 @@ function kamuz_loadmore_pagination() {
 	);
 
 	$taxonomy = ! empty( $_POST['taxonomy'] ) ? $_POST['taxonomy'] : '';
-	$term_id = ! empty( $_POST['termID'] ) ? $_POST['termID'] : '';
+	$term_id  = ! empty( $_POST['termID'] ) ? $_POST['termID'] : '';
 
 	if ( $taxonomy && $term_id ) {
 		$args['tax_query'] = array(
