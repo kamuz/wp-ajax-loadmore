@@ -63,6 +63,18 @@ function simple_pagination() {
 function kamuz_loadmore_pagination() {
 	$paged = ! empty( $_POST['paged'] ) ? $_POST['paged'] : 1;
 
+	$current_url = wp_get_referer();
+
+	if ( ! $current_url ) {
+		$current_url = home_url( '/' );
+	}
+
+	// Remove existing pagination from URL.
+	$current_url = preg_replace( '#/page/\d+/?$#', '', $current_url );
+	$current_url = trailingslashit( $current_url );
+
+	$url = $current_url . 'page/' . $paged . '/';
+
 	$args = array(
 		'paged'       => $paged,
 		'post_status' => 'publish',
@@ -105,6 +117,7 @@ function kamuz_loadmore_pagination() {
 		array(
 			'posts'      => $posts,
 			'pagination' => str_replace( admin_url( 'admin-ajax.php'), $_POST['pagenumlink'], $pagination ),
+			'url'        => $url,
 		)
 	);
 	wp_die();

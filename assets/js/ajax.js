@@ -6,10 +6,8 @@ jQuery(function($) {
 	const termID = button.data('term-id');
 	const paginationLink = button.data('pagenumlink')
 	let paged = button.data('paged');
-	console.log('Hey');
 	button.click(function(e) {
 		e.preventDefault();
-		console.log(button.text());
 		$.ajax({
 			type: 'POST',
 			url: kamuz.ajax_url, // WordPress admin-ajax endpoint
@@ -25,10 +23,14 @@ jQuery(function($) {
 				button.addClass('is-loading').text('Loading...'); // show loading state
 			},
 			success: function(data){
-				console.log(data.pagination);
 				$('#posts-list').append(data.posts); // insert new posts before the button
 				$('.pagination').html(data.pagination);
 				button.removeClass('is-loading').text('Load more'); // restore button label
+				console.log(data.url);
+				// Change URL
+				if (data.url) {
+					window.history.pushState({}, '', data.url);
+				}
 				if(paged == maxPages) {
 					button.parent().remove();
 				}
